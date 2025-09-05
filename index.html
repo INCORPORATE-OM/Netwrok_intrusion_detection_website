@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Intrusion Detection System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); transition: all 0.3s ease-in-out; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1); }
+        .table-header { background-color: #f9fafb; }
+        .table-row:nth-child(even) { background-color: #f9fafb; }
+        .status-normal { color: #16a34a; background-color: #dcfce7; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+        .status-intrusion { color: #dc2626; background-color: #fee2e2; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 flex-shrink-0 bg-white shadow-lg flex flex-col">
+        <div class="h-20 flex items-center justify-center border-b">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-blue-600"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <h1 class="text-xl font-bold text-gray-800 ml-3">NetGuard</h1>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2">
+            <a href="#" class="flex items-center px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-semibold">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-blue-600"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Dashboard
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                Analytics
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3"><path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1V14c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h1.8c-.1.2-.2.5-.2.8v1.6c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h2.8c.4 0 .8-.2 1.1-.5.3-.3.5-.7.5-1.1v-1.6c0-.3-.1-.6-.2-.8h1.8c.4 0 .8-.2 1.1-.5.3-.3.5-.7.5-1.1V3.6c0-.4-.2-.8-.5-1.1-.3-.3-.7-.5-1.1-.5z"></path><path d="M12 15v6"></path><path d="M9.5 9h5"></path></svg>
+                Reports
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3"><path d="M10.68 13.31a16 16 0 0 0 3.64 0M19.07 10.93A8 8 0 1 0 4.93 10.93"></path><line x1="12" y1="17" x2="12" y2="22"></line><line x1="10" y1="22" x2="14" y2="22"></line><path d="m15 9-.5-1-1-1"></path><path d="m9 9 .5-1 1-1"></path></svg>
+                Alerts
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                Settings
+            </a>
+        </nav>
+        <div class="px-4 py-6 border-t">
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <img class="h-10 w-10 rounded-full" src="https://placehold.co/100x100/E2E8F0/4A5568?text=Admin" alt="Admin Avatar">
+                <div class="ml-3">
+                    <p class="text-sm font-semibold text-gray-800">Admin User</p>
+                    <p class="text-xs text-gray-500">Network Specialist</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8 overflow-y-auto">
+        <header class="flex flex-wrap gap-3 justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Dashboard Overview</h1>
+                <p class="text-gray-500 mt-1">Real-time network intrusion detection status.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="train-btn" class="flex items-center bg-emerald-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-emerald-700 transition duration-300">Train Model</button>
+                <button id="metrics-btn" class="flex items-center bg-slate-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-slate-700 transition duration-300">Refresh Metrics</button>
+                <button id="live-btn" class="flex items-center bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300">Start Live</button>
+                <button id="scan-btn" class="flex items-center bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    Initiate Full Scan
+                </button>
+            </div>
+        </header>
+
+        <div id="status" class="text-sm text-slate-600 mb-4"></div>
+
+        <div id="metrics" class="mb-6 bg-white p-6 rounded shadow hidden">
+            <h2 class="text-xl font-semibold mb-2">Model Metrics</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div><span class="font-semibold">Accuracy:</span> <span id="m-acc">-</span></div>
+                <div><span class="font-semibold">F1:</span> <span id="m-f1">-</span></div>
+                <div><span class="font-semibold">Detection Rate:</span> <span id="m-dr">-</span></div>
+                <div><span class="font-semibold">False Alarm:</span> <span id="m-far">-</span></div>
+            </div>
+            <div class="mt-4">
+                <h3 class="font-semibold">Confusion Matrix [rows=true, cols=pred] [normal, attack]</h3>
+                <pre id="m-cm" class="text-xs bg-slate-50 p-3 rounded overflow-auto"></pre>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="card p-6 flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Total Connections</p>
+                    <p id="total-connections" class="text-2xl font-bold text-gray-800">0</p>
+                </div>
+            </div>
+            <div class="card p-6 flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Normal Connections</p>
+                    <p id="normal-connections" class="text-2xl font-bold text-gray-800">0</p>
+                </div>
+            </div>
+            <div class="card p-6 flex items-center">
+                <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Intrusions Detected</p>
+                    <p id="intrusions-detected" class="text-2xl font-bold text-gray-800">0</p>
+                </div>
+            </div>
+            <div class="card p-6 flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Intrusion Rate</p>
+                    <p id="intrusion-rate" class="text-2xl font-bold text-gray-800">0.00%</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="card lg:col-span-2">
+                <div class="p-6 border-b">
+                    <h2 class="text-xl font-semibold text-gray-800">Real-time Connection Log</h2>
+                    <p class="text-sm text-gray-500">Live feed of incoming network connections.</p>
+                </div>
+                <div class="p-4">
+                    <form id="predict-form" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <input type="text" name="protocol_type" placeholder="Protocol (tcp/udp/icmp)" class="p-2 border rounded" required>
+                        <input type="text" name="service" placeholder="Service (http, ftp, ...)" class="p-2 border rounded" required>
+                        <input type="text" name="flag" placeholder="Flag (SF, S0, ...)" class="p-2 border rounded" required>
+                        <input type="number" step="any" name="src_bytes" placeholder="src_bytes" class="p-2 border rounded" required>
+                        <input type="number" step="any" name="dst_bytes" placeholder="dst_bytes" class="p-2 border rounded" required>
+                        <input type="number" step="any" name="duration" placeholder="duration" class="p-2 border rounded" required>
+                        <input type="number" step="any" name="count" placeholder="count" class="p-2 border rounded" required>
+                        <input type="number" step="any" name="srv_count" placeholder="srv_count" class="p-2 border rounded" required>
+                        <button type="submit" class="col-span-2 md:col-span-4 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Predict & Log</button>
+                    </form>
+                </div>
+                <div class="h-96 overflow-y-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase table-header sticky top-0">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Timestamp</th>
+                                <th scope="col" class="px-6 py-3">Source IP</th>
+                                <th scope="col" class="px-6 py-3">Destination IP</th>
+                                <th scope="col" class="px-6 py-3">Protocol</th>
+                                <th scope="col" class="px-6 py-3">Status</th>
+                                <th scope="col" class="px-6 py-3">Prob</th>
+                            </tr>
+                        </thead>
+                        <tbody id="connection-log">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="p-6 border-b">
+                    <h2 class="text-xl font-semibold text-gray-800">Detected Classes</h2>
+                    <p class="text-sm text-gray-500">Distribution of predictions.</p>
+                </div>
+                <div class="p-6">
+                    <canvas id="attack-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="scan-toast" class="fixed bottom-10 right-10 bg-gray-800 text-white py-3 px-6 rounded-lg shadow-lg opacity-0 transform translate-y-4 transition-all duration-300">
+        Scanning network...
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let totalConnections = 0;
+        let normalConnections = 0;
+        let intrusionsDetected = 0;
+        let normalCount = 0, attackCount = 0;
+
+        const totalEl = document.getElementById('total-connections');
+        const normalEl = document.getElementById('normal-connections');
+        const intrusionsEl = document.getElementById('intrusions-detected');
+        const rateEl = document.getElementById('intrusion-rate');
+        const logBody = document.getElementById('connection-log');
+        const scanBtn = document.getElementById('scan-btn');
+        const scanToast = document.getElementById('scan-toast');
+        const statusSpan = document.getElementById('status');
+        const metricsBox = document.getElementById('metrics');
+        const mAcc = document.getElementById('m-acc');
+        const mF1 = document.getElementById('m-f1');
+        const mDR = document.getElementById('m-dr');
+        const mFAR = document.getElementById('m-far');
+        const mCM = document.getElementById('m-cm');
+        const trainBtn = document.getElementById('train-btn');
+        const metricsBtn = document.getElementById('metrics-btn');
+        const liveBtn = document.getElementById('live-btn');
+        const predictForm = document.getElementById('predict-form');
+
+        const ctx = document.getElementById('attack-chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: ['Normal', 'Attack'], datasets: [{ data: [normalCount, attackCount], backgroundColor: ['#22c55e', '#ef4444'], borderColor: '#fff', borderWidth: 2 }]},
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        async function callAPI(path, opts={}){
+            const res = await fetch(path, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts));
+            if(!res.ok){ let err='Request failed'; try{ err=(await res.json()).error||err; }catch(e){} throw new Error(err); }
+            return res.json();
+        }
+
+        trainBtn.addEventListener('click', async () => {
+            statusSpan.textContent = 'Training... this can take minutes.';
+            try{
+                const data = await callAPI('/train', { method: 'POST' });
+                statusSpan.textContent = `Trained. F1 ${data.f1.toFixed(3)}, DR ${data.detection_rate.toFixed(3)}, FAR ${data.false_alarm_rate.toFixed(3)}`;
+                await refreshMetrics();
+            }catch(e){ statusSpan.textContent = `Error: ${e.message}`; }
+        });
+
+        metricsBtn.addEventListener('click', async () => { await refreshMetrics(); });
+
+        async function refreshMetrics(){
+            try{
+                const m = await callAPI('/metrics');
+                metricsBox.classList.remove('hidden');
+                mAcc.textContent = m.accuracy.toFixed(4);
+                mF1.textContent = m.f1.toFixed(4);
+                mDR.textContent = m.detection_rate.toFixed(4);
+                mFAR.textContent = m.false_alarm_rate.toFixed(4);
+                mCM.textContent = JSON.stringify(m.confusion_matrix, null, 2);
+            }catch(e){ statusSpan.textContent = `Error: ${e.message}`; }
+        }
+
+        const rand = (max) => Math.floor(Math.random() * max);
+        const generateRandomIp = () => `${rand(255)}.${rand(255)}.${rand(255)}.${rand(255)}`;
+        const protos = ['tcp','udp','icmp'];
+        const flags = ['SF','S0','REJ','RSTO'];
+        const services = ['http','ftp','smtp','domain_u'];
+
+        function appendLogRow(isIntrusion, protocol, prob){
+            const newRow = document.createElement('tr');
+            newRow.classList.add('bg-white', 'border-b', 'table-row');
+            const statusClass = isIntrusion ? 'status-intrusion' : 'status-normal';
+            const labelText = isIntrusion ? 'Intrusion' : 'Normal';
+            newRow.innerHTML = `
+                <td class="px-6 py-4">${new Date().toLocaleTimeString()}</td>
+                <td class="px-6 py-4 font-medium text-gray-900">${generateRandomIp()}</td>
+                <td class="px-6 py-4 font-medium text-gray-900">${generateRandomIp()}</td>
+                <td class="px-6 py-4">${protocol.toUpperCase()}</td>
+                <td class="px-6 py-4"><span class="${statusClass}">${labelText}</span></td>
+                <td class="px-6 py-4">${prob.toFixed(3)}</td>
+            `;
+            logBody.prepend(newRow);
+            if (logBody.children.length > 100) { logBody.removeChild(logBody.lastChild); }
+        }
+
+        function updateCards(){
+            totalEl.textContent = totalConnections.toLocaleString();
+            normalEl.textContent = normalConnections.toLocaleString();
+            intrusionsEl.textContent = intrusionsDetected.toLocaleString();
+            const rate = totalConnections > 0 ? (intrusionsDetected / totalConnections) * 100 : 0;
+            rateEl.textContent = `${rate.toFixed(2)}%`;
+            chart.data.datasets[0].data = [normalCount, attackCount];
+            chart.update();
+        }
+
+        predictForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fd = new FormData(predictForm);
+            const data = {};
+            fd.forEach((v,k)=>{ data[k] = isNaN(v) ? v : Number(v); });
+            // defaults for missing model fields
+            Object.assign(data, {
+                wrong_fragment: 0, urgent: 0, hot: 0, num_failed_logins: 0, logged_in: 0,
+                num_compromised: 0, root_shell: 0, su_attempted: 0, num_root: 0,
+                num_file_creations: 0, num_shells: 0, num_access_files: 0, is_host_login: 0,
+                is_guest_login: 0, serror_rate: 0, srv_serror_rate: 0, rerror_rate: 0,
+                srv_rerror_rate: 0, same_srv_rate: 0, diff_srv_rate: 0, srv_diff_host_rate: 0,
+                dst_host_count: 0, dst_host_srv_count: 0, dst_host_same_srv_rate: 0,
+                dst_host_diff_srv_rate: 0, dst_host_same_src_port_rate: 0, dst_host_srv_diff_host_rate: 0,
+                dst_host_serror_rate: 0, dst_host_srv_serror_rate: 0, dst_host_rerror_rate: 0,
+                dst_host_srv_rerror_rate: 0
+            });
+            try{
+                const res = await callAPI('/predict', { method: 'POST', body: JSON.stringify(data) });
+                const isIntrusion = res.prediction_label === 'attack';
+                const prob = res.prob_attack || 0;
+                totalConnections++;
+                if(isIntrusion){ intrusionsDetected++; attackCount++; } else { normalConnections++; normalCount++; }
+                appendLogRow(isIntrusion, data.protocol_type, prob);
+                updateCards();
+            }catch(err){ statusSpan.textContent = `Error: ${err.message}`; }
+        });
+
+        scanBtn.addEventListener('click', async () => {
+            scanToast.classList.remove('opacity-0', 'translate-y-4');
+            scanToast.classList.add('opacity-100', 'translate-y-0');
+            scanBtn.disabled = true;
+            const old = scanBtn.innerHTML;
+            scanBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Scanning network...`;
+            // simulate burst of predictions using backend /predict
+            const jobs = Array.from({length: 10}).map(async ()=>{
+                const payload = {
+                    protocol_type: protos[rand(protos.length)],
+                    service: services[rand(services.length)],
+                    flag: flags[rand(flags.length)],
+                    src_bytes: rand(5000), dst_bytes: rand(5000), duration: rand(60), count: rand(100), srv_count: rand(100)
+                };
+                Object.assign(payload, { wrong_fragment: 0, urgent: 0, hot: 0, num_failed_logins: 0, logged_in: 0, num_compromised: 0, root_shell: 0, su_attempted: 0, num_root: 0, num_file_creations: 0, num_shells: 0, num_access_files: 0, is_host_login: 0, is_guest_login: 0, serror_rate: 0, srv_serror_rate: 0, rerror_rate: 0, srv_rerror_rate: 0, same_srv_rate: 0, diff_srv_rate: 0, srv_diff_host_rate: 0, dst_host_count: 0, dst_host_srv_count: 0, dst_host_same_srv_rate: 0, dst_host_diff_srv_rate: 0, dst_host_same_src_port_rate: 0, dst_host_srv_diff_host_rate: 0, dst_host_serror_rate: 0, dst_host_srv_serror_rate: 0, dst_host_rerror_rate: 0, dst_host_srv_rerror_rate: 0 });
+                try{
+                    const res = await callAPI('/predict', { method: 'POST', body: JSON.stringify(payload) });
+                    const isIntrusion = res.prediction_label === 'attack';
+                    const prob = res.prob_attack || 0;
+                    totalConnections++;
+                    if(isIntrusion){ intrusionsDetected++; attackCount++; } else { normalConnections++; normalCount++; }
+                    appendLogRow(isIntrusion, payload.protocol_type, prob);
+                }catch(e){ /* ignore individual errors */ }
+            });
+            await Promise.all(jobs);
+            updateCards();
+            setTimeout(() => {
+                scanToast.classList.add('opacity-0', 'translate-y-4');
+                scanToast.classList.remove('opacity-100', 'translate-y-0');
+                scanBtn.disabled = false;
+                scanBtn.innerHTML = old;
+            }, 500);
+        });
+
+        liveBtn.addEventListener('click', async () => {
+            try{
+                if(liveBtn.dataset.active === '1'){
+                    await callAPI('/live/stop', { method: 'POST' });
+                    if(window.liveES){ window.liveES.close(); window.liveES = null; }
+                    liveBtn.dataset.active = '0';
+                    liveBtn.textContent = 'Start Live';
+                    statusSpan.textContent = 'Live capture stopped';
+                    return;
+                }
+                await callAPI('/live/start', { method: 'POST' });
+                window.liveES = new EventSource('/live/stream');
+                window.liveES.onmessage = (e) => {
+                    try{
+                        const msg = JSON.parse(e.data);
+                        const isIntrusion = (msg.prediction_label === 'attack');
+                        const prob = msg.prob_attack || 0;
+                        totalConnections++;
+                        if(isIntrusion){ intrusionsDetected++; attackCount++; } else { normalConnections++; normalCount++; }
+                        appendLogRow(isIntrusion, msg.protocol_type || 'tcp', prob);
+                        updateCards();
+                    }catch(err){ /* ignore parse errors */ }
+                };
+                window.liveES.onerror = () => { statusSpan.textContent = 'Live stream error'; };
+                liveBtn.dataset.active = '1';
+                liveBtn.textContent = 'Stop Live';
+                statusSpan.textContent = 'Live capture running...';
+            }catch(e){ statusSpan.textContent = `Error: ${e.message}`; }
+        });
+
+        // try to show metrics if already trained
+        refreshMetrics().catch(()=>{});
+    });
+</script>
+</body>
+</html>
